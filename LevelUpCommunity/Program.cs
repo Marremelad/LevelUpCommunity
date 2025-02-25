@@ -1,4 +1,5 @@
 using LevelUpCommunity.Data;
+using LevelUpCommunity.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -34,6 +35,30 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+
+        // Returns all members in the database.
+        app.MapGet("/members", async (LevelUpCommunityContext context) => await context.Members.ToListAsync());
+        
+        // Returns all events in the database.
+        app.MapGet("/events", async (LevelUpCommunityContext context) => await context.Events.ToListAsync());
+        
+        // Returns all participants of an event.
+        app.MapGet("/member-events/{id:int}", async (LevelUpCommunityContext context, int id) =>
+        {
+            var eventParticipants = await context.MemberEvents
+                .Where(me => me.EventIdFk == id)
+                .Include(me => me.Member)
+                .Include(me => me.Event)
+                .GroupBy(me => me.EventIdFk)
+                .Select(group => new
+                {
+                    eventName = group.First().Event.EventName,
+                    eventParticipants = group.Select(me => me.Member.MemberName).ToList()
+                })
+                .FirstOrDefaultAsync(); // Assuming there's only one event with this ID
+
+            return eventParticipants;
+        });
         
         app.Run();
     }
