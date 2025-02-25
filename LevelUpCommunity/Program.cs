@@ -1,7 +1,5 @@
 using LevelUpCommunity.Data;
-using LevelUpCommunity.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace LevelUpCommunity;
 
