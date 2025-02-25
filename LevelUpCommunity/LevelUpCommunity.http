@@ -1,0 +1,6 @@
+@LevelUpCommunity_HostAddress = http://localhost:5240
+
+GET {{LevelUpCommunity_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
