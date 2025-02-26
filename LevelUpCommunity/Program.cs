@@ -53,7 +53,7 @@ public class Program
                     eventName = group.First().Event.EventName,
                     eventParticipants = group.Select(me => me.Member.MemberName).ToList()
                 })
-                .FirstOrDefaultAsync(); // Assuming there's only one event with this ID
+                .FirstOrDefaultAsync();
 
             return eventParticipants;
         });
